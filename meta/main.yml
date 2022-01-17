@@ -1,19 +1,16 @@
 ---
 galaxy_info:
-  author: your name
-  description: your role description
+  author: yoshiaki tanaka
+  description: setup Nginx
   license: MIT
-  role_name: my_name
-  namespace: my_galaxy_namespace
+  namespace: wate
+  role_name: nginx
   min_ansible_version: 2.11
-  # platforms:
-  #   - name: EL
-  #     versions:
-  #       - 7
-  #   - name: Debian
-  #     versions:
-  #       - bullseye
-  #       - buster
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - buster
   galaxy_tags: []
 dependencies: []
   # List your role dependencies here, one per line. Be sure to remove the '[]' above,
