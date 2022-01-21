@@ -99,33 +99,28 @@ nginx_vhosts:
   # # --------------
   # - name: reverse_proxy
   #   server_name: reverse_proxy.exampe.com
+  #   upstream:
+  #     name: backend
+  #     content: |
+  #       server unix:///path/to/app.sock;
   #   locations:
   #     - pattern: /
   #       content: |
-  #         proxy_pass http://127.0.0.1:8080;
+  #         # proxy_pass http://127.0.0.1:8080;
+  #         proxy_pass http://backend;
   #         include proxy_params;
-  # #--------------
+  # # --------------
   # # Load Balancer
-  # #--------------
+  # # --------------
   # - name: load_balancer
   #   upstream:
   #     name: backend
-  #     ip_hash: true
-  #     least_conn: true
-  #     servers:
-  #       - address: backend1.example.com
-  #         parameters: "weight=5"
-  #       - address: backend2.example.com
-  #         parameters:
-  #           - "fail_timeout=5s"
-  #           - "slow_start=30s"
-  #       - address: backend3.example.com
-  #         parameters: down
-  #       - address: backend4.example.com
-  #         parameters: backup
-  #       - address: backend5.example.com
-  #         parameters: backup
-  #     extra_setting: ""
+  #     content: |
+  #       server backend1.example.com       weight=5;
+  #       server backend2.example.com:8080;
+  #       server unix:/tmp/backend3;
+  #       server backup1.example.com:8080   backup;
+  #       server backup2.example.com:8080   backup;
   #   server_name: www.exampe.com
   #   locations:
   #     - pattern: /
