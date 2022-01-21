@@ -21,6 +21,8 @@ nginx_vhosts: []
   #     - pattern: "/\\.ht"
   #       match_type: "~"
   #       content: "deny all;"
+  #     - pattern: "/.well-known/acme-challenge/"
+  #       content: "alias /var/lib/dehydrated/acme-challenges/"
   # # --------------
   # # WordPress
   # # --------------
