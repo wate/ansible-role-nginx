@@ -4,31 +4,38 @@
 {% endif -%}
 {% if item.upstream is defined -%}
 upstream {{ item.upstream.name }} {
-    {% for balance_server in item.upstream.servers -%}
-    server {{ balance_server.address }}{% if balance_server.parameters is defined %} {{ balance_server.parameters if balance_server.parameters is string else balance_server.parameters|join(' ') }}{% endif %};
-    {% endfor -%}
-    {% if item.upstream.ip_hash is defined and item.upstream.ip_hash -%}
-    ip_hash;
-    {% endif -%}
-    {% if item.upstream.least_conn is defined and item.upstream.least_conn -%}
-    least_conn;
-    {% endif -%}
-    {% if item.upstream.extra_setting is defined -%}
-    {{ item.upstream.extra_setting }}
-    {% endif %}
+    {{ item.upstream.content }}
 }
 {% endif %}
+
+{% if item.ssl is defined -%}
+server {
+  listen {{ item.listen | default(80) }}{{ item.default | default(false) | ternary(' default_server', '') }};
+  listen [::]:{{ item.listen | default(80) }}{{ item.default | default(false) | ternary(' default_server', '') }};
+  {% if item.server_name is defined -%}
+  server_name {{ item.server_name if item.server_name is string else item.server_name | join(' ') }};
+  {% endif -%}
+  location ^~ /.well-known/acme-challenge/ {
+    default_type "text/plain";
+    alias /var/lib/dehydrated/acme-challenges/;
+  }
+  location / {
+      return 301 https://$host$request_uri;
+  }
+}
+{% endif -%}
+
 server {
     {% if item.ssl is undefined -%}
-    listen {{ item.listen | default(80) }}{{ ' default_server' if item.default | default(false) else ''  }};
-    listen [::]:{{ item.listen | default(80) }}{{ ' default_server' if item.default | default(false) else ''  }};
+    listen {{ item.listen | default(80) }}{{ item.default | default(false) | ternary(' default_server', '') }};
+    listen [::]:{{ item.listen | default(80) }}{{ item.default | default(false) | ternary(' default_server', '') }};
     {% else %}
-    listen 443 ssl http2{{ ' default_server' if item.default | default(false) else ''  }};
-    listen [::]:443 ssl http2{{ ' default_server' if item.default | default(false) else ''  }};
+    listen 443 ssl http2{{ item.default | default(false) | ternary(' default_server', '') }};
+    listen [::]:443 ssl http2{{ item.default | default(false) | ternary(' default_server', '') }};
     {% endif -%}
 
     {% if item.variables is defined -%}
-    {% for variable in item.variables | default({}) -%}
+    {% for variable in item.variables | default([]) -%}
     set ${{ variable.name }} "{{ variable.value }}";
     {% endfor -%}
     {% endif -%}
@@ -42,7 +49,7 @@ server {
     {% endif -%}
 
     {% if item.server_name is defined -%}
-    server_name {{ item.server_name if item.server_name is string else item.server_name | join(' ') }};
+    server_name {{ item.server_name is string | ternary(item.server_name, item.server_name | join(' ')) }};
     {% endif -%}
 
     {% if item.access_log is defined -%}
@@ -57,7 +64,7 @@ server {
     {% endif -%}
 
     {% if item.index is defined -%}
-    index {{ item.index if item.index is string else item.index | join(' ') }};
+    index {{ item.index is string | ternary(item.index, item.index | join(' ')) }};
     {% endif -%}
 
     {% for add_header in item.add_headers | default([]) -%}
@@ -91,7 +98,7 @@ server {
     ssl_ciphers "{{ item.ssl.ciphers | join(':') }}";
     {% endif -%}
     {% if item.ssl.prefer_server_ciphers is defined -%}
-    ssl_prefer_server_ciphers {{ 'on' if item.ssl.prefer_server_ciphers else 'off' }};
+    ssl_prefer_server_ciphers {{ item.ssl.prefer_server_ciphers | ternary('on', 'off') }};
     {% endif -%}
 
     {% if item.ssl.session_timeout is defined -%}
@@ -101,7 +108,7 @@ server {
     ssl_session_cache {{ item.ssl.session_cache }};
     {% endif -%}
     {% if item.ssl.session_tickets is defined -%}
-    ssl_session_tickets {{ 'on' if item.ssl.session_tickets else 'off' }};
+    ssl_session_tickets {{ item.ssl.session_tickets | ternary('on', 'off') }};
     {% endif -%}
 
     {% if item.ssl.dhparam is defined -%}
@@ -117,10 +124,10 @@ server {
     {% if item.ssl.stapling is defined -%}
     # OCSP Stapling ---
     # fetch OCSP records from URL in ssl_certificate and cache them
-    ssl_stapling {{ 'on' if item.ssl.stapling  else 'off' }};
+    ssl_stapling {{ item.ssl.stapling | ternary('on', 'off') }};
     {% endif -%}
     {% if item.ssl.stapling_verify is defined  -%}
-    ssl_stapling_verify {{ 'on' if item.ssl.stapling_verify else 'off' }};
+    ssl_stapling_verify {{ item.ssl.stapling_verify | ternary('on', 'off') }};
     {% endif -%}
     {% endif -%}
     {% if item.extra_setting is defined -%}
