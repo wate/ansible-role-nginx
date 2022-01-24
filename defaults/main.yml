@@ -16,6 +16,9 @@ nginx_vhosts:
     access_log: /var/log/nginx/access.log
     error_log: /var/log/nginx/error.log
     document_root: /var/www/html
+    index:
+      - index.html
+      - index.php
     # upstream:
     #   name: backend
     #   content: |
