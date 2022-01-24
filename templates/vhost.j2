@@ -44,9 +44,7 @@ server {
     include {{ include_file }};
     {% endfor -%}
 
-    {% if item.client_max_body_size is defined -%}
-    client_max_body_size {{ item.client_max_body_size }};
-    {% endif -%}
+    client_max_body_size {{ item.client_max_body_size | default(nginx_default_client_max_body_size) }};
 
     {% if item.server_name is defined -%}
     server_name {{ item.server_name is string | ternary(item.server_name, item.server_name | join(' ')) }};

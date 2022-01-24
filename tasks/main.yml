@@ -36,7 +36,7 @@
     dest: "/etc/nginx/snippets/{{ item | basename }}"
     mode: "0644"
   loop: "{{ lookup('fileglob', 'files/snippets/*.conf', wantlist=True) }}"
-  notify: reload nginx
+  notify: restart nginx
 - name: create nginx extra config files
   template:
     src: "{{ item }}"
@@ -57,7 +57,7 @@
     dest: /etc/nginx/sites-available/{{ item.name | default(item.server_name) }}
     mode: "0644"
   loop: "{{ nginx_vhosts }}"
-  notify: reload nginx
+  notify: restart nginx
 - name: change site config
   file:
     path: /etc/nginx/sites-enabled/{{ item.name | default(item.server_name) }}
@@ -65,7 +65,7 @@
     state: "{{ item.state | default(true) | ternary('link', 'absent') }}"
     mode: "0644"
   loop: "{{ nginx_vhosts }}"
-  notify: reload nginx
+  notify: restart nginx
 - name: nginx is active and enabled on system startup
   service:
     name: nginx
