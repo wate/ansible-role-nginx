@@ -36,7 +36,7 @@ server {
 
     {% if item.variables is defined -%}
     {% for variable in item.variables | default([]) -%}
-    set ${{ variable.name }} "{{ variable.value }}";
+    set ${{ variable.name }} {{ variable.value }};
     {% endfor -%}
     {% endif -%}
 
