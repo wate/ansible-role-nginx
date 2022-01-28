@@ -1,6 +1,7 @@
 ---
 nginx_packages:
   - nginx
+  - goaccess
   # - libnginx-mod-http-image-filter
   # - libnginx-mod-http-lua
 
