@@ -137,25 +137,25 @@ nginx_vhosts:
   # --------------
   # Load Balancer
   # --------------
-  - name: load_balancer
-    upstream:
-      name: backend
-      content: |
-        server backend1.example.com       weight=5;
-        server backend2.example.com:8080;
-        server unix:/tmp/backend3;
-        server backup1.example.com:8080   backup;
-        server backup2.example.com:8080   backup;
-    server_name: www.exampe.com
-    locations:
-      - pattern: "/.well-known/acme-challenge/"
-        match_type: "^~"
-        content: |
-          alias /var/lib/dehydrated/acme-challenges/;
-      - pattern: /
-        content: |
-          proxy_pass http://backend;
-          include proxy_params;
+  # - name: load_balancer
+  #   upstream:
+  #     name: backend
+  #     content: |
+  #       server backend1.example.com       weight=5;
+  #       server backend2.example.com:8080;
+  #       server unix:/tmp/backend3;
+  #       server backup1.example.com:8080   backup;
+  #       server backup2.example.com:8080   backup;
+  #   server_name: www.exampe.com
+  #   locations:
+  #     - pattern: "/.well-known/acme-challenge/"
+  #       match_type: "^~"
+  #       content: |
+  #         alias /var/lib/dehydrated/acme-challenges/;
+  #     - pattern: /
+  #       content: |
+  #         proxy_pass http://backend;
+  #         include proxy_params;
   # --------------
   # status page
   # --------------
