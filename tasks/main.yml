@@ -25,4 +25,3 @@
 - name: setup service
   ansible.builtin.import_tasks: service.yml
   tags: service
-
