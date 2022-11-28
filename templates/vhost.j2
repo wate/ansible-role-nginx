@@ -8,6 +8,11 @@ upstream {{ item.upstream.name }} {
 }
 {% endif %}
 
+{% if item.pre_extra_setting is defined -%}
+# Pre Extra setting
+{{ item.pre_extra_setting }}
+{% endif %}
+
 {% for redirect_host in item.redirect_hosts | default([]) -%}
 server {
     server_name {{ redirect_host }};
