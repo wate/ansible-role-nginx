@@ -102,15 +102,15 @@ nginx_vhosts:
   # --------------
   # - name: reverse_proxy
   #   server_name: reverse_proxy.exampe.com
-  #   upstream:
-  #     name: backend
-  #     content: |
-  #       server unix:/path/to/app.sock;
   #   pre_extra_setting: |
   #     map $http_upgrade $connection_upgrade {
   #         default upgrade;
   #         ''      close;
   #     }
+  #   upstream:
+  #     name: backend
+  #     content: |
+  #       server unix:/path/to/app.sock;
   #   client_max_body_size: 50M
   #   locations:
   #     - pattern: "/\\.well-known/acme-challenge/"

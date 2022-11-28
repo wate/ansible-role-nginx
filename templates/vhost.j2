@@ -2,15 +2,14 @@
 {% if item.server_name is defined -%}
 # Virtual Host configuration for {{ item.server_name }}
 {% endif -%}
+{% if item.pre_extra_setting is defined -%}
+# Pre Extra setting
+{{ item.pre_extra_setting }}
+{% endif %}
 {% if item.upstream is defined -%}
 upstream {{ item.upstream.name }} {
     {{ item.upstream.content }}
 }
-{% endif %}
-
-{% if item.pre_extra_setting is defined -%}
-# Pre Extra setting
-{{ item.pre_extra_setting }}
 {% endif %}
 
 {% for redirect_host in item.redirect_hosts | default([]) -%}
