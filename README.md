@@ -1,33 +1,69 @@
 nginx
-=========
+=================
 
-A brief description of the role goes here.
+setup Nginx web server
 
-Requirements
-------------
+OS Platform
+-----------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+### Debian
+
+- bullseye
+- buster
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+### `nginx_packages`
 
-Dependencies
-------------
+インストールするパッケージ
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+### `nginx_default_client_max_body_size`
+
+アップロードサイズの上限
+
+### `nginx_vhosts`
+
+バーチャルホストの設定
+
+### `nginx_generate_dh_key`
+
+Diffie–Hellmanキーを生成するか否か
+
+### `nginx_dh_key_bit`
+
+Diffie–Hellmanキーのビット数
+
+### `nginx_dh_key_path`
+
+Diffie–Hellmanキーのパス
+
+### `nginx_cfg_ssl_protocols`
+
+SSL/TLSバージョンの設定
+
+### `nginx_cfg_ssl_ciphers`
+
+SSL Cipherの設定
+
+### `nginx_cfg`
+
+Nginxの全体設定
+
+### `nginx_modules`
+
+モジュールの設定
 
 Example Playbook
-----------------
+--------------
 
-```yml
+```yaml
 - hosts: servers
   roles:
     - role: nginx
 ```
 
 License
--------
+--------------
 
 Apache License 2.0
