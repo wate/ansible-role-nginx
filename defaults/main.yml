@@ -11,7 +11,7 @@ nginx_packages:
 ## --------------
 ## アップロードサイズの上限
 ## --------------
-nginx_default_client_max_body_size: "20M"
+nginx_default_client_max_body_size: 20M
 
 ## --------------
 ## バーチャルホストの設定
@@ -44,24 +44,23 @@ nginx_vhosts:
     #     value: var_value
     client_max_body_size: 20M
     locations:
-      - pattern: "/\\.well-known/acme-challenge/"
-        match_type: "^~"
+      - pattern: /\.well-known/acme-challenge/
+        match_type: ^~
         content: |
           default_type "text/plain";
           alias /var/lib/dehydrated/acme-challenges/;
-      - pattern: "/\\.well-known/acme-challenge/"
+      - pattern: /\.well-known/acme-challenge/
         match_type: "="
         content: |
           return 404;
-      - pattern: "/"
-        content:
-          try_files $uri $uri/ =404;
-      - pattern: "\\.php$"
+      - pattern: /
+        content: try_files $uri $uri/ =404;
+      - pattern: \.php$
         match_type: "~"
         content: |
           include snippets/fastcgi-php.conf;
           fastcgi_pass unix:/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
-      - pattern: "/\\.ht"
+      - pattern: /\.ht
         match_type: "~"
         content: |
           deny all;
@@ -177,9 +176,9 @@ nginx_vhosts:
   - name: status
     server_name: localhost
     listen: 8080
-    access_log: 'off'
+    access_log: "off"
     locations:
-      - pattern: "/nginx_status"
+      - pattern: /nginx_status
         content: |
           stub_status on;
 
@@ -220,7 +219,7 @@ nginx_cfg_ssl_ciphers:
 ## Nginxの全体設定
 ## --------------
 nginx_cfg:
-  user: "www-data"
+  user: www-data
   worker_processes: auto
   pid: /run/nginx.pid
   events:
@@ -233,7 +232,7 @@ nginx_cfg:
     keepalive_timeout: 65
     types_hash_max_size: 2048
     server_tokens: false
-    default_type: "application/octet-stream"
+    default_type: application/octet-stream
     # server_names_hash_bucket_size: 64
     # server_name_in_redirect: false
     access_log: /var/log/nginx/access.log
@@ -244,8 +243,8 @@ nginx_cfg:
       ciphers: "{{ nginx_cfg_ssl_ciphers }}"
       # dhparam: "{{ nginx_dh_key_path }}"
       prefer_server_ciphers: true
-      session_timeout: "1d"
-      session_cache: "shared:SSL:10m"
+      session_timeout: 1d
+      session_cache: shared:SSL:10m
       session_tickets: false
       # hsts: "max-age={{ 60 * 60 * 24 * (365 / 2) }}; includeSubDomains;"
       stapling: true
@@ -254,7 +253,7 @@ nginx_cfg:
     gzip_vary: true
     gzip_proxied: any
     gzip_comp_level: 6
-    gzip_buffers: "16 8k"
+    gzip_buffers: 16 8k
     gzip_http_version: 1.1
     gzip_types:
       - text/plain
@@ -265,7 +264,7 @@ nginx_cfg:
       - application/xml
       - application/xml+rss
       - text/javascript
-  # extra_setting: "# extra setting here"
+# extra_setting: "# extra setting here"
 
 ## --------------
 ## モジュールの設定

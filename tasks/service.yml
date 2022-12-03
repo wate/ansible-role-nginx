@@ -5,6 +5,6 @@
     state: started
     enabled: true
 - name: allow http and https port
-  ufw:
+  community.general.ufw:
     rule: allow
-    name: "WWW Full"
+    name: WWW Full
