@@ -1,10 +1,10 @@
 ---
-- name: nginx is active and enabled on system startup
+- name: Service nginx is active and enabled on system startup
   ansible.builtin.systemd:
     name: nginx
     state: started
     enabled: true
-- name: allow http and https port
+- name: Allow http and https port
   community.general.ufw:
     rule: allow
     name: WWW Full

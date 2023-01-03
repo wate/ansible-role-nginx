@@ -1,4 +1,4 @@
 ---
-- name: install dependency package
+- name: Install dependency package
   ansible.builtin.apt:
     name: ufw
