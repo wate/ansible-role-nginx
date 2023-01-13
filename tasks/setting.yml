@@ -1,5 +1,5 @@
 ---
-- name: create config directories
+- name: Create/update config directories
   ansible.builtin.file:
     path: /etc/nginx/{{ item }}
     state: directory
@@ -11,18 +11,18 @@
     - modules-enabled
     - sites-available
     - sites-enabled
-- name: create nginx.conf
+- name: Create/update nginx.conf
   ansible.builtin.template:
     src: nginx.conf.j2
     dest: /etc/nginx/nginx.conf
     mode: "0644"
   notify: restart nginx
-- name: generate OpenSSL Diffie-Hellman parameters
+- name: Generate OpenSSL Diffie-Hellman parameters
   community.crypto.openssl_dhparam:
     path: "{{ nginx_dh_key_path }}"
     size: "{{ nginx_dh_key_bit }}"
   when: nginx_generate_dh_key
-- name: copy snippet files
+- name: Copy snippet files
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: /etc/nginx/snippets/{{ item | basename }}
@@ -31,15 +31,15 @@
   loop_control:
     label: "{{ item | basename }}"
   notify: restart nginx
-- name: create nginx extra config files
+- name: Create nginx extra config files
   ansible.builtin.template:
     src: "{{ item }}"
     dest: /etc/nginx/conf.d/{{ item[:-3] | basename }}
     mode: "0644"
   loop: "{{ lookup('fileglob', 'templates/conf/*.conf.j2', wantlist=True) }}"
   loop_control:
-    label: "{{ item | basename }}"
-- name: change extra config status
+    label: "{{ item[:-3] | basename }}"
+- name: Change extra config status
   ansible.builtin.file:
     path: /etc/nginx/modules-enabled/{{ item.name }}.conf
     src: "{{ item.state | default(true) | ternary('/etc/nginx/modules-available/' + item.name + '.conf', omit) }}"
@@ -49,7 +49,7 @@
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
   notify: restart nginx
-- name: create site config files
+- name: Create site config files
   ansible.builtin.template:
     src: vhost.j2
     dest: /etc/nginx/sites-available/{{ item.name | default(item.server_name) }}
@@ -58,7 +58,7 @@
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
   notify: restart nginx
-- name: change site config
+- name: Change site config
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/{{ item.name | default(item.server_name) }}
     src: "{{ item.state | default(true) | ternary('/etc/nginx/sites-available/' + item.name | default(item.server_name), omit) }}"
