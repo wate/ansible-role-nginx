@@ -68,7 +68,3 @@
   loop_control:
     label: "{{ item.name | default(item.server_name) }}"
   notify: restart nginx
-- name: Update goaccess setting
-  ansible.builtin.import_tasks:
-    file: setting/goaccess.yml
-  when: "'goaccess' in nginx_packages"
