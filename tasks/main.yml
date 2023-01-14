@@ -16,9 +16,6 @@
 - name: Include dependency package task
   ansible.builtin.import_tasks: dependency.yml
   tags: dependency
-- name: Include repository task
-  ansible.builtin.import_tasks: repository.yml
-  tags: repository
 - name: Include package task
   ansible.builtin.import_tasks: package.yml
   tags: package
