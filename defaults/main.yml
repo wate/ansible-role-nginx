@@ -29,6 +29,7 @@ nginx_vhosts:
     index:
       - index.html
       - index.php
+    ## 以下のホスト名でアクセスされた場合は「server_name」の値にリダイレクトさせる
     redirect_hosts:
       - www.example.com
     # upstream:
