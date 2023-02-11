@@ -7,6 +7,9 @@ nginx_packages:
   - goaccess
   # - libnginx-mod-http-image-filter
   # - libnginx-mod-http-lua
+  # - libnginx-mod-http-geoip2
+  # - libnginx-mod-http-js
+  # - libnginx-mod-http-modsecurity
 
 ## --------------
 ## アップロードサイズの上限
