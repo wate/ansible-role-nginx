@@ -52,10 +52,6 @@ SSL Cipherの設定
 
 Nginxの全体設定
 
-### `nginx_modules`
-
-モジュールの設定
-
 Example Playbook
 --------------
 

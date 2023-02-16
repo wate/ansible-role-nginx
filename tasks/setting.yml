@@ -39,16 +39,6 @@
   loop: "{{ lookup('fileglob', 'templates/conf/*.conf.j2', wantlist=True) }}"
   loop_control:
     label: "{{ item[:-3] | basename }}"
-- name: Change extra config status
-  ansible.builtin.file:
-    path: /etc/nginx/modules-enabled/{{ item.name }}.conf
-    src: "{{ item.state | default(true) | ternary('/etc/nginx/modules-available/' + item.name + '.conf', omit) }}"
-    state: "{{ item.state | default(true) | ternary('link', 'absent') }}"
-    mode: "0644"
-  loop: "{{ nginx_modules }}"
-  loop_control:
-    label: "{{ item.name | default(item.server_name) }}"
-  notify: restart nginx
 - name: Create site config files
   ansible.builtin.template:
     src: vhost.j2
