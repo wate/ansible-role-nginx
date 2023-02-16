@@ -5,7 +5,6 @@
 nginx_packages:
   - nginx
   - goaccess
-  # - libnginx-mod-http-image-filter
   # - libnginx-mod-http-lua
   # - libnginx-mod-http-geoip2
   # - libnginx-mod-http-js
@@ -258,9 +257,3 @@ nginx_cfg:
       - application/xml+rss
       - text/javascript
 # extra_setting: "# extra setting here"
-
-## --------------
-## モジュールの設定
-## --------------
-nginx_modules: []
-  # - name: http_upstream_fair.conf
