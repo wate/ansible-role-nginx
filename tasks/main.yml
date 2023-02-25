@@ -11,20 +11,31 @@
       paths:
         - vars
 - name: Include variable file
-  ansible.builtin.include_vars: "{{ variable_file }}"
+  ansible.builtin.include_vars:
+    file: "{{ variable_file }}"
   when: variable_file | length > 0
-- name: Include dependency package task
-  ansible.builtin.import_tasks: dependency.yml
-  tags: dependency
+- name: Import dependency package task
+  ansible.builtin.import_tasks:
+    file: dependency.yml
+  tags:
+    - role_nginx_dependency
 - name: Include repository task
-  ansible.builtin.import_tasks: repository.yml
-  tags: repository
-- name: Include package task
-  ansible.builtin.import_tasks: package.yml
-  tags: package
-- name: Include setting task
-  ansible.builtin.import_tasks: setting.yml
-  tags: setting
-- name: Include service task
-  ansible.builtin.import_tasks: service.yml
-  tags: service
+  ansible.builtin.import_tasks:
+    file: repository.yml
+  tags:
+    - role_nginx_repository
+- name: Import package task
+  ansible.builtin.import_tasks:
+    file: package.yml
+  tags:
+    - role_nginx_package
+- name: Import setting task
+  ansible.builtin.import_tasks:
+    file: setting.yml
+  tags:
+    - role_nginx_setting
+- name: Import service task
+  ansible.builtin.import_tasks:
+    file: service.yml
+  tags:
+    - role_nginx_service
