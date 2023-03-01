@@ -95,7 +95,7 @@ nginx_vhosts:
   #     certificate_key: /var/lib/dehydrated/certs/ssl.exampe.com/privkey.pem
   #     trusted_certificate: /var/lib/dehydrated/certs/ssl.exampe.com/chain.pem
   #     session_timeout: "1d"
-  #     session_cache: "shared:SSL:50m"
+  #     session_cache: "shared:SSL:10m"
   #     session_tickets: false
   #     hsts: "max-age=31536000;"
   #     stapling: true
