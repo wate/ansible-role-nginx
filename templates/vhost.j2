@@ -15,7 +15,8 @@ upstream {{ item.upstream.name }} {
 {% for redirect_host in item.redirect_hosts | default([]) -%}
 server {
     server_name {{ redirect_host }};
-    return 301 $scheme://{{ item.server_name is string | ternary(item.server_name, item.server_name[0]) }}$request_uri;
+    return 301 $scheme://{{ (item.server_name is string) | ternary(item.server_name, item.server_name[0]) }}$request_uri;
+    access_log off;
 }
 {% endfor -%}
 
@@ -26,6 +27,7 @@ server {
     {% if item.server_name is defined -%}
     server_name {{ item.server_name if item.server_name is string else item.server_name | join(' ') }};
     {% endif -%}
+    access_log off;
     location ^~ /.well-known/acme-challenge/ {
       default_type "text/plain";
       alias /var/lib/dehydrated/acme-challenges/;

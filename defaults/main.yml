@@ -47,6 +47,14 @@ nginx_vhosts:
     #     value: var_value
     client_max_body_size: 20M
     locations:
+      - pattern: /favicon.ico
+        content: |
+          access_log off;
+          log_not_found off;
+      - pattern: /robots.txt
+        content: |
+          access_log off;
+          log_not_found off;
       - pattern: /.well-known/acme-challenge/
         match_type: ^~
         content: |
