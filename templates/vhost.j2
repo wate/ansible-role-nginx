@@ -92,7 +92,6 @@ server {
     {% endfor -%}
 
     {% if item.ssl.certificate is defined -%}
-    ssl on;
     # certs sent to the client in SERVER HELLO are concatenated in ssl_certificate
     ssl_certificate {{ item.ssl.certificate }};
     ssl_certificate_key {{ item.ssl.certificate_key }};
