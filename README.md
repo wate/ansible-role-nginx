@@ -20,6 +20,10 @@ Role Variables
 
 インストールするパッケージ
 
+### `nginx_append_goaccess_repository`
+
+goaccessリポジトリを追加するか否か
+
 ### `nginx_default_client_max_body_size`
 
 アップロードサイズの上限

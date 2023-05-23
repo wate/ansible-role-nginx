@@ -11,6 +11,11 @@ nginx_packages:
   # - libnginx-mod-http-modsecurity
 
 ## --------------
+## goaccessリポジトリを追加するか否か
+## --------------
+nginx_append_goaccess_repository: true
+
+## --------------
 ## アップロードサイズの上限
 ## --------------
 nginx_default_client_max_body_size: 20M
