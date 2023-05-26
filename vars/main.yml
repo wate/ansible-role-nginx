@@ -1,1 +1,3 @@
 ---
+nginx_goaccess_apt_key_url: https://deb.goaccess.io/gnugpg.key
+nginx_goaccess_apt_key_dest: /usr/share/keyrings/goaccess.gpg.key
