@@ -13,7 +13,7 @@ nginx_packages:
 ## --------------
 ## goaccessリポジトリを追加するか否か
 ## --------------
-nginx_append_goaccess_repository: true
+nginx_append_goaccess_repository: false
 
 ## --------------
 ## アップロードサイズの上限
