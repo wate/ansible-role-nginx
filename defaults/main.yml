@@ -94,6 +94,7 @@ nginx_vhosts:
   #         alias /var/lib/dehydrated/acme-challenges/;
   #     - pattern: /
   #       content: |
+  #         # add_header X-Robots-Tag "noindex, nofollow";
   #         try_files $uri $uri/ /index.php?$query_string;
   #     - pattern: "\\.php"
   #       match_type: "~"
