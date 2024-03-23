@@ -5,9 +5,7 @@
 nginx_packages:
   - nginx
   - goaccess
-  # - libnginx-mod-http-lua
-  # - libnginx-mod-http-geoip2
-  # - libnginx-mod-http-js
+  - libnginx-mod-http-geoip
   # - libnginx-mod-http-modsecurity
 
 ## --------------
@@ -72,6 +70,11 @@ nginx_vhosts:
         content: |
           include snippets/fastcgi-php.conf;
           fastcgi_pass unix:/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+      # - pattern: /geoip-block-example
+      #   content: |
+      #     if ($allowed_country = no) {
+      #       return 403;
+      #     }
       - pattern: /\.ht
         match_type: "~"
         content: |
@@ -266,4 +269,10 @@ nginx_cfg:
       - application/xml
       - application/xml+rss
       - text/javascript
-# extra_setting: "# extra setting here"
+  # extra_setting: |
+  #   geoip_country /usr/share/GeoIP/GeoIP.dat;
+  #   map $geoip_country_code $allowed_country {
+  #     default yes;
+  #     CN no;
+  #     RU no;
+  #   }

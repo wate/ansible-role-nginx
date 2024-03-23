@@ -20,6 +20,11 @@
       when: ansible_facts.pkg_mgr == 'dnf'
       changed_when: false
   tasks:
+    - name: Install geoip packages
+      ansible.builtin.apt:
+        name:
+          - geoip-bin
+          - geoip-database
     - name: Include role
       ansible.builtin.include_role:
         name: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
