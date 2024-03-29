@@ -69,7 +69,12 @@ nginx_vhosts:
         match_type: "~"
         content: |
           include snippets/fastcgi-php.conf;
-          fastcgi_pass unix:/run/php/php{{ php_version | default('8.1') }}-fpm.sock;
+          fastcgi_pass unix:/run/php/php{{ php_version | default('8.2') }}-fpm.sock;
+          # send_timeout 60s; # クライアントへの応答のタイムアウト時間
+          # keepalive_timeout 60s; # クライアントとの接続をキープする時間
+          # fastcgi_connect_timeout 60s; # nginxとphp-fpmの接続を確立するためのタイムアウト時間
+          # fastcgi_send_timeout 60s; # nginxからphp-fpmへのリクエスト送信のタイムアウト時間
+          # fastcgi_read_timeout 60s; # php-fpmからの応答のタイムアウト時間
       # - pattern: /geoip-block-example
       #   content: |
       #     if ($allowed_country = no) {
@@ -104,6 +109,11 @@ nginx_vhosts:
   #       content: |
   #         fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
   #         include snippets/fastcgi-php.conf;
+  #         # send_timeout 60s; # クライアントへの応答のタイムアウト時間
+  #         # keepalive_timeout 60s; # クライアントとの接続をキープする時間
+  #         # fastcgi_connect_timeout 60s; # nginxとphp-fpmの接続を確立するためのタイムアウト時間
+  #         # fastcgi_send_timeout 60s; # nginxからphp-fpmへのリクエスト送信のタイムアウト時間
+  #         # fastcgi_read_timeout 60s; # php-fpmからの応答のタイムアウト時間
   #     - pattern: "/\\.ht"
   #       match_type: "~"
   #       content: "deny all;"
@@ -143,6 +153,9 @@ nginx_vhosts:
   #         # proxy_pass http://127.0.0.1:8080;
   #         proxy_pass http://backend;
   #         include proxy_params;
+  #         # proxy_read_timeout 60s;
+  #         # proxy_connect_timeout 60s;
+  #         # proxy_send_timeout 60s;
   #     - pattern: /socket.io/
   #       content: |
   #         # proxy_pass http://127.0.0.1:8080;
