@@ -41,7 +41,7 @@
     label: "{{ item[:-3] | basename }}"
 - name: Create site config files
   ansible.builtin.template:
-    src: vhost.j2
+    src: vhost.conf.j2
     dest: /etc/nginx/sites-available/{{ item.name | default(item.server_name) }}
     mode: "0644"
   loop: "{{ nginx_vhosts }}"
