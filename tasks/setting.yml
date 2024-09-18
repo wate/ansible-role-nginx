@@ -42,19 +42,24 @@
 - name: Create site config files
   ansible.builtin.template:
     src: vhost.conf.j2
-    dest: /etc/nginx/sites-available/{{ item.name | default(item.server_name) }}
+    dest: /etc/nginx/sites-available/{{ vhost.key }}
     mode: "0644"
-  loop: "{{ nginx_vhosts }}"
+  vars:
+    vhost_setting_name: "{{ vhost.key }}"
+    vhost_setting: "{{ vhost.value }}"
+  loop: "{{ nginx_vhosts | dict2items }}"
   loop_control:
-    label: "{{ item.name | default(item.server_name) }}"
+    loop_var: vhost
+    label: "{{ vhost.key }}"
   notify: restart nginx
 - name: Change site config
   ansible.builtin.file:
-    path: /etc/nginx/sites-enabled/{{ item.name | default(item.server_name) }}
-    src: "{{ item.state | default(true) | ternary('/etc/nginx/sites-available/' + item.name | default(item.server_name), omit) }}"
-    state: "{{ item.state | default(true) | ternary('link', 'absent') }}"
+    path: /etc/nginx/sites-enabled/{{ vhost.key }}
+    src: "{{ vhost.value.state | default(true) | ternary('/etc/nginx/sites-available/' + vhost.key, omit) }}"
+    state: "{{ vhost.value.state | default(true) | ternary('link', 'absent') }}"
     mode: "0644"
-  loop: "{{ nginx_vhosts }}"
+  loop: "{{ nginx_vhosts | dict2items }}"
   loop_control:
-    label: "{{ item.name | default(item.server_name) }}"
+    loop_var: vhost
+    label: "{{ vhost.key }}"
   notify: restart nginx
