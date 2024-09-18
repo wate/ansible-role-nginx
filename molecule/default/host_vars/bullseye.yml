@@ -1,0 +1,8 @@
+---
+## --------------
+## インストールするパッケージ
+## --------------
+nginx_packages:
+  - nginx
+  - goaccess
+  - libnginx-mod-http-geoip

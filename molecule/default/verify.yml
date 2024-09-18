@@ -1,7 +1,7 @@
 ---
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
   become: true
   tasks:
     ## パッケージのテスト
@@ -12,6 +12,7 @@
       ansible.builtin.assert:
         that:
           - ansible_facts.packages['nginx']
+          - ansible_facts.packages['libnginx-mod-http-geoip']
     ## ユーザーのテスト
     - name: Check user
       ansible.builtin.user:
