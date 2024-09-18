@@ -39,6 +39,22 @@
   loop: "{{ lookup('fileglob', 'templates/conf/*.conf.j2', wantlist=True) }}"
   loop_control:
     label: "{{ item[:-3] | basename }}"
+- name: Check Nginx ModSecurity rules file
+  ansible.builtin.stat:
+    path: /etc/nginx/modsecurity_includes.conf
+  register: nginx_modsecurity_rules_file
+- name: Check OWASP ModSecurity Core Rule Set
+  ansible.builtin.stat:
+    path: /usr/share/modsecurity-crs/owasp-crs.load
+  register: owasp_modsecurity_core_rule_set
+- name: Enable OWASP ModSecurity Core Rule Set
+  ansible.builtin.lineinfile:
+    path: /etc/nginx/modsecurity_includes.conf
+    regex: "#?include /usr/share/modsecurity-crs/owasp-crs.load"
+    line: include /usr/share/modsecurity-crs/owasp-crs.load
+  when:
+    - nginx_modsecurity_rules_file.stat.exists
+    - owasp_modsecurity_core_rule_set.stat.exists
 - name: Create site config files
   ansible.builtin.template:
     src: vhost.conf.j2
