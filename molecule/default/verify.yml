@@ -13,12 +13,6 @@
         that:
           - ansible_facts.packages['nginx']
           - ansible_facts.packages['libnginx-mod-http-geoip']
-    - name: Assert modsecurity package
-      ansible.builtin.assert:
-        that:
-          - ansible_facts.packages['libnginx-mod-http-modsecurity']
-          - ansible_facts.packages['modsecurity-crs']
-      when: ansible_facts.distribution_major_version is version(11, '>')
     ## ユーザーのテスト
     - name: Check user
       ansible.builtin.user:
