@@ -31,12 +31,10 @@ nginx_vhosts:
     includes:
       - snippets/letsencrypt_dehydrated.conf
       - snippets/modsecurity.conf
-      # - /usr/share/modsecurity-crs/owasp-crs.load
     add_headers:
       X-custom-var: $var_name
       X-geoip-country-code: $geoip_country_code
-      X-allowed-country: $geoip_country_code
-      X-geo: $geo
+      X-allowed-country: $allowed_country
     locations:
       - pattern: /favicon.ico
         content: |
@@ -48,16 +46,6 @@ nginx_vhosts:
           log_not_found off;
       - pattern: /
         content: try_files $uri $uri/ =404;
-      - pattern: \.php$
-        match_type: "~"
-        content: |
-          include snippets/fastcgi-php.conf;
-          fastcgi_pass unix:/run/php/php{{ php_version | default('8.2') }}-fpm.sock;
-          # send_timeout 60s; # クライアントへの応答のタイムアウト時間
-          # keepalive_timeout 60s; # クライアントとの接続をキープする時間
-          # fastcgi_connect_timeout 60s; # nginxとphp-fpmの接続を確立するためのタイムアウト時間
-          # fastcgi_send_timeout 60s; # nginxからphp-fpmへのリクエスト送信のタイムアウト時間
-          # fastcgi_read_timeout 60s; # php-fpmからの応答のタイムアウト時間
       - pattern: /\.ht
         match_type: "~"
         content: |

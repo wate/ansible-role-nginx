@@ -54,6 +54,20 @@
           - result.stat.exists
           - result.stat.islnk
           - result.stat.lnk_source == '/etc/nginx/sites-available/default'
+    # - name: Test load OWASP ModSecurity Core Rule Set
+    #   when:
+    #     - ansible_facts.packages['libnginx-mod-http-modsecurity']
+    #     - ansible_facts.packages['modsecurity-crs']
+    #   block:
+    #     - name: Check load OWASP ModSecurity Core Rule Set
+    #       ansible.builtin.lineinfile:
+    #         path: /etc/nginx/modsecurity_includes.conf
+    #         line: include /usr/share/modsecurity-crs/owasp-crs.load
+    #       register: load_owasp_modsecurity_core_rule_set
+    #     - name: Assert load OWASP ModSecurity Core Rule Set
+    #       ansible.builtin.assert:
+    #         that:
+    #           - load_owasp_modsecurity_core_rule_set is not changed
     ## サービスのテスト
     - name: Populate service facts
       ansible.builtin.service_facts:
