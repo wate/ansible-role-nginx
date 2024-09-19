@@ -5,7 +5,7 @@
   become: true
   tasks:
     ## パッケージのテスト
-    - name: Gather the package facts
+    - name: Gather package facts
       ansible.builtin.package_facts:
         manager: auto
     - name: Assert package
@@ -54,6 +54,20 @@
           - result.stat.exists
           - result.stat.islnk
           - result.stat.lnk_source == '/etc/nginx/sites-available/default'
+    - name: Test load OWASP ModSecurity Core Rule Set
+      when: ansible_facts.packages['libnginx-mod-http-modsecurity'] is defined
+      block:
+        - name: Check load OWASP ModSecurity Core Rule Set
+          ansible.builtin.lineinfile:
+            path: /etc/nginx/modsecurity_includes.conf
+            line: include {{ item }}
+          check_mode: true
+          register: modsecurity_rule_file_included
+          loop: "{{ nginx_modsecurity_include_files }}"
+        - name: Assert load OWASP ModSecurity Core Rule Set
+          ansible.builtin.assert:
+            that:
+              - modsecurity_rule_file_included is not changed
     ## サービスのテスト
     - name: Populate service facts
       ansible.builtin.service_facts:

@@ -1,15 +1,6 @@
 ---
 nginx_cfg:
   extra_setting: |
-    geo $geo {
-        default        0;
-        127.0.0.1      2;
-        192.168.0.0/16 1;
-        172.16.0.0/12  1;
-        10.1.0.0/8     1;
-        ::1            2;
-        2001:0db8::/32 1;
-    }
     geoip_country /usr/share/GeoIP/GeoIP.dat;
     map $geoip_country_code $allowed_country {
       default yes;
@@ -42,9 +33,9 @@ nginx_vhosts:
     includes:
       - snippets/letsencrypt_dehydrated.conf
     add_headers:
+      X-custom-var: $var_name
       X-geoip-country-code: $geoip_country_code
-      X-allowed-country: $geoip_country_code
-      X-geo: $geo
+      X-allowed-country: $allowed_country
     locations:
       - pattern: /favicon.ico
         content: |
@@ -56,16 +47,6 @@ nginx_vhosts:
           log_not_found off;
       - pattern: /
         content: try_files $uri $uri/ =404;
-      - pattern: \.php$
-        match_type: "~"
-        content: |
-          include snippets/fastcgi-php.conf;
-          fastcgi_pass unix:/run/php/php{{ php_version | default('8.2') }}-fpm.sock;
-          # send_timeout 60s; # クライアントへの応答のタイムアウト時間
-          # keepalive_timeout 60s; # クライアントとの接続をキープする時間
-          # fastcgi_connect_timeout 60s; # nginxとphp-fpmの接続を確立するためのタイムアウト時間
-          # fastcgi_send_timeout 60s; # nginxからphp-fpmへのリクエスト送信のタイムアウト時間
-          # fastcgi_read_timeout 60s; # php-fpmからの応答のタイムアウト時間
       - pattern: /\.ht
         match_type: "~"
         content: |
@@ -81,3 +62,12 @@ nginx_vhosts:
       - pattern: /nginx_status
         content: |
           stub_status on;
+
+## --------------
+## ModSecurityを有効にする場合に読み込むルールファイル
+## --------------
+nginx_modsecurity_include_files:
+  - /etc/modsecurity/crs/crs-setup.conf
+  - /etc/modsecurity/crs/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
+  - /usr/share/modsecurity-crs/rules/*.conf
+  - /etc/modsecurity/crs/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf

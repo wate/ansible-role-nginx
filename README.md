@@ -56,6 +56,10 @@ SSL Cipherの設定
 
 Nginxの全体設定
 
+### `nginx_modsecurity_include_files`
+
+ModSecurityを有効にする場合に読み込むルールファイル
+
 Example Playbook
 --------------
 
