@@ -290,3 +290,12 @@ nginx_cfg:
   #     default no;
   #     JP yes;
   #   }
+
+## --------------
+## ModSecurityを有効にする場合に読み込むルールファイル
+## --------------
+nginx_modsecurity_include_files:
+  - /etc/modsecurity/crs/crs-setup.conf
+  - /etc/modsecurity/crs/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
+  - /usr/share/modsecurity-crs/rules/*.conf
+  - /etc/modsecurity/crs/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf

@@ -1,15 +1,6 @@
 ---
 nginx_cfg:
   extra_setting: |
-    geo $geo {
-        default        0;
-        127.0.0.1      2;
-        192.168.0.0/16 1;
-        172.16.0.0/12  1;
-        10.1.0.0/8     1;
-        ::1            2;
-        2001:0db8::/32 1;
-    }
     geoip_country /usr/share/GeoIP/GeoIP.dat;
     map $geoip_country_code $allowed_country {
       default yes;
@@ -71,3 +62,12 @@ nginx_vhosts:
       - pattern: /nginx_status
         content: |
           stub_status on;
+
+## --------------
+## ModSecurityを有効にする場合に読み込むルールファイル
+## --------------
+nginx_modsecurity_include_files:
+  - /etc/modsecurity/crs/crs-setup.conf
+  - /etc/modsecurity/crs/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
+  - /usr/share/modsecurity-crs/rules/*.conf
+  - /etc/modsecurity/crs/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
