@@ -10,11 +10,22 @@
 - name: Append goaccess repository
   when: nginx_append_goaccess_repository
   block:
-    - name: Add apt signing key
+    ## @see https://goaccess.io/download#official-repo
+    - name: Create GPG key directory
+      ansible.builtin.file:
+        path: "{{ nginx_goaccess_apt_key_dest | dirname }}"
+        state: directory
+        mode: "0755"
+    - name: Download GPG key
       ansible.builtin.get_url:
         url: "{{ nginx_goaccess_apt_key_url }}"
-        dest: "{{ nginx_goaccess_apt_key_dest }}"
+        dest: "{{ nginx_goaccess_apt_key_download_dest }}"
         mode: "0644"
+      register: gpg_key_download_result
+    - name: Convert GPG key
+      ansible.builtin.command:
+        cmd: gpg --dearmor -o {{ nginx_goaccess_apt_key_dest }} {{ nginx_goaccess_apt_key_download_dest }}
+      when: gpg_key_download_result is changed
     - name: Add goaccess repository
       ansible.builtin.apt_repository:
         filename: goaccess
