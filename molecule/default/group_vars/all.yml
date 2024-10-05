@@ -1,4 +1,5 @@
 ---
+nginx_append_goaccess_repository: true
 nginx_cfg:
   extra_setting: |
     geo $geo {
