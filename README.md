@@ -68,6 +68,8 @@ ModSecurityを有効にする場合に読み込むルールファイル
 
 #### `nginx_goaccess_apt_key_url`
 
+#### `nginx_goaccess_apt_key_download_dest`
+
 #### `nginx_goaccess_apt_key_dest`
 
 Example Playbook
