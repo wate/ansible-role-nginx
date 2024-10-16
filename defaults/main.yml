@@ -71,16 +71,16 @@ nginx_vhosts: {}
   #       match_type: "~"
   #       content: |
   #         include snippets/fastcgi-php.conf;
-  #         ## クライアントへの応答のタイムアウト時間
-  #         # send_timeout 60s;
-  #         ## クライアントとの接続をキープする時間
-  #         # keepalive_timeout 60s;
+  #         ## php-fpmからの応答のタイムアウト時間
+  #         fastcgi_read_timeout 60s;
   #         ## nginxとphp-fpmの接続を確立するためのタイムアウト時間
   #         # fastcgi_connect_timeout 60s;
   #         ## nginxからphp-fpmへのリクエスト送信のタイムアウト時間
   #         # fastcgi_send_timeout 60s;
-  #         ## php-fpmからの応答のタイムアウト時間
-  #         # fastcgi_read_timeout 60s;
+  #         ## クライアントへの応答のタイムアウト時間
+  #         # send_timeout 60s;
+  #         ## クライアントとの接続をキープする時間
+  #         # keepalive_timeout 60s;
   #     - pattern: /\.ht
   #       match_type: "~"
   #       content: |
@@ -110,16 +110,16 @@ nginx_vhosts: {}
   #       content: |
   #         fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
   #         include snippets/fastcgi-php.conf;
-  #         ## クライアントへの応答のタイムアウト時間
-  #         # send_timeout 60s;
-  #         ## クライアントとの接続をキープする時間
-  #         # keepalive_timeout 60s;
+  #         ## php-fpmからの応答のタイムアウト時間
+  #         fastcgi_read_timeout 60s;
   #         ## nginxとphp-fpmの接続を確立するためのタイムアウト時間
   #         # fastcgi_connect_timeout 60s;
   #         ## nginxからphp-fpmへのリクエスト送信のタイムアウト時間
   #         # fastcgi_send_timeout 60s;
-  #         ## php-fpmからの応答のタイムアウト時間
-  #         # fastcgi_read_timeout 60s;
+  #         ## クライアントへの応答のタイムアウト時間
+  #         # send_timeout 60s;
+  #         ## クライアントとの接続をキープする時間
+  #         # keepalive_timeout 60s;
   #     - pattern: "/\\.ht"
   #       match_type: "~"
   #       content: "deny all;"
