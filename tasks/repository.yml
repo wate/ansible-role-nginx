@@ -2,6 +2,8 @@
 - name: Install dependency packages
   ansible.builtin.apt:
     name:
+      - python3-apt
+      - python3-debian
       - apt-transport-https
       - ca-certificates
       - curl
@@ -27,15 +29,21 @@
         cmd: gpg --dearmor -o {{ nginx_goaccess_apt_key_dest }} {{ nginx_goaccess_apt_key_download_dest }}
       when: gpg_key_download_result is changed
     - name: Add goaccess repository
-      ansible.builtin.apt_repository:
-        filename: goaccess
-        repo: >
-          deb [signed-by={{ nginx_goaccess_apt_key_dest }} arch={{ arch_type_maps[ansible_facts.architecture] }}]
-          https://deb.goaccess.io/
-          {{ ansible_facts.distribution_release }}
-          main
+      ansible.builtin.deb822_repository:
+        name: goaccess
+        uris: https://deb.goaccess.io/
+        suites: "{{ ansible_facts.distribution_release }}"
+        components: main
+        signed_by: "{{ nginx_goaccess_apt_key_dest }}"
+        architectures: "{{ arch_type_maps[ansible_facts.architecture] }}"
+        enabled: true
         state: present
       vars:
         arch_type_maps:
           x86_64: amd64
           aarch64: arm64
+      register: apt_repository_result
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+      when: apt_repository_result is changed

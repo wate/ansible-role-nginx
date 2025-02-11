@@ -4,6 +4,17 @@
   gather_facts: true
   become: true
   tasks:
+    ## リポジトリのテスト
+    - name: Test goaccess repository
+      block:
+        - name: Check apt source setting
+          ansible.builtin.stat:
+            path: /etc/apt/sources.list.d/goaccess.sources
+          register: goaccess_repo_result
+        - name: Assert file
+          ansible.builtin.assert:
+            that:
+              - goaccess_repo_result.stat.exists
     ## パッケージのテスト
     - name: Gather package facts
       ansible.builtin.package_facts:
@@ -13,6 +24,7 @@
         that:
           - ansible_facts.packages['nginx']
           - ansible_facts.packages['libnginx-mod-http-geoip']
+          - ansible_facts.packages['goaccess']
     ## ユーザーのテスト
     - name: Check user
       ansible.builtin.user:
