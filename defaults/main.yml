@@ -22,10 +22,10 @@ nginx_default_client_max_body_size: 20M
 ## --------------
 ## バーチャルホストの設定
 ## --------------
-nginx_vhosts: {}
-  # --------------
-  # Simple static site
-  # --------------
+nginx_vhosts:
+  ## --------------
+  ## Simple static site
+  ## --------------
   # default:
   #   default_server: true
   #   server_name: example.com
@@ -85,9 +85,9 @@ nginx_vhosts: {}
   #       match_type: "~"
   #       content: |
   #         deny all;
-  # --------------
-  # PHP and SSL
-  # --------------
+  ## --------------
+  ## PHP and SSL
+  ## --------------
   # php_and_ssl:
   #   server_name: ssl.exampe.com
   #   index: "index.html index.htm index.php"
@@ -134,9 +134,9 @@ nginx_vhosts: {}
   #     hsts: "max-age=31536000;"
   #     stapling: true
   #     stapling_verify: true
-  # --------------
-  # Reverse proxy
-  # --------------
+  ## --------------
+  ## Reverse proxy
+  ## --------------
   # reverse_proxy:
   #   server_name: reverse_proxy.exampe.com
   #   pre_extra_setting: |
@@ -174,9 +174,9 @@ nginx_vhosts: {}
   #     - pattern: "/\\.ht"
   #       match_type: "~"
   #       content: "deny all;"
-  # --------------
-  # Load Balancer
-  # --------------
+  ## --------------
+  ## Load Balancer
+  ## --------------
   # load_balancer:
   #   upstream:
   #     name: backend
@@ -197,9 +197,9 @@ nginx_vhosts: {}
   #       content: |
   #         proxy_pass http://backend;
   #         include proxy_params;
-  # --------------
-  # status page
-  # --------------
+  ## --------------
+  ## status page
+  ## --------------
   # status:
   #   server_name: localhost
   #   listen: 8080
