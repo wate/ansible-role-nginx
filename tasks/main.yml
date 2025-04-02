@@ -10,32 +10,29 @@
         - "{{ ansible_facts.os_family }}.yml"
       paths:
         - vars
+  tags: role_nginx_include_vars
 - name: Include variable file
   ansible.builtin.include_vars:
     file: "{{ variable_file }}"
   when: variable_file | length > 0
+  tags: role_nginx_include_vars
 - name: Import dependency package task
   ansible.builtin.import_tasks:
     file: dependency.yml
-  tags:
-    - role_nginx_dependency
+  tags: role_nginx_dependency
 - name: Include repository task
   ansible.builtin.import_tasks:
     file: repository.yml
-  tags:
-    - role_nginx_repository
+  tags: role_nginx_repository
 - name: Import package task
   ansible.builtin.import_tasks:
     file: package.yml
-  tags:
-    - role_nginx_package
+  tags: role_nginx_package
 - name: Import setting task
   ansible.builtin.import_tasks:
     file: setting.yml
-  tags:
-    - role_nginx_setting
+  tags: role_nginx_setting
 - name: Import service task
   ansible.builtin.import_tasks:
     file: service.yml
-  tags:
-    - role_nginx_service
+  tags: role_nginx_service

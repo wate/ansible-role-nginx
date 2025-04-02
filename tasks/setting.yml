@@ -16,7 +16,7 @@
     src: nginx.conf.j2
     dest: /etc/nginx/nginx.conf
     mode: "0644"
-  notify: restart nginx
+  notify: Restart nginx
 - name: Generate OpenSSL Diffie-Hellman parameters
   community.crypto.openssl_dhparam:
     path: "{{ nginx_dh_key_path }}"
@@ -30,7 +30,7 @@
   loop: "{{ lookup('fileglob', 'files/snippets/*.conf', wantlist=True) }}"
   loop_control:
     label: "{{ item | basename }}"
-  notify: restart nginx
+  notify: Restart nginx
 - name: Create nginx extra config files
   ansible.builtin.template:
     src: "{{ item }}"
@@ -64,7 +64,7 @@
   loop_control:
     loop_var: vhost
     label: "{{ vhost.key }}"
-  notify: restart nginx
+  notify: Restart nginx
 - name: Change site config
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/{{ vhost.key }}
@@ -75,4 +75,4 @@
   loop_control:
     loop_var: vhost
     label: "{{ vhost.key }}"
-  notify: restart nginx
+  notify: Restart nginx
