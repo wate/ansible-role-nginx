@@ -15,6 +15,8 @@
           ansible.builtin.assert:
             that:
               - goaccess_repo_result.stat.exists
+            fail_msg: "GoAccess repository source file not found"
+            success_msg: "GoAccess repository source file exists"
     ## パッケージのテスト
     - name: Gather package facts
       ansible.builtin.package_facts:
@@ -22,9 +24,11 @@
     - name: Assert package
       ansible.builtin.assert:
         that:
-          - ansible_facts.packages['nginx']
-          - ansible_facts.packages['libnginx-mod-http-geoip']
-          - ansible_facts.packages['goaccess']
+          - ansible_facts.packages['nginx'] is defined
+          - ansible_facts.packages['libnginx-mod-http-geoip'] is defined
+          - ansible_facts.packages['goaccess'] is defined
+        fail_msg: "Some required packages are not installed"
+        success_msg: "All required packages are installed"
     ## ユーザーのテスト
     - name: Check user
       ansible.builtin.user:
@@ -36,6 +40,8 @@
       ansible.builtin.assert:
         that:
           - result is not changed
+        fail_msg: "www-data user is not properly configured"
+        success_msg: "www-data user is properly configured"
     ## グループのテスト
     - name: Check group
       ansible.builtin.group:
@@ -47,6 +53,8 @@
       ansible.builtin.assert:
         that:
           - result is not changed
+        fail_msg: "www-data group is not properly configured"
+        success_msg: "www-data group is properly configured"
     # ファイルのテスト
     - name: Check virtualhost setting
       ansible.builtin.stat:
@@ -56,6 +64,8 @@
       ansible.builtin.assert:
         that:
           - result.stat.exists
+        fail_msg: "nginx virtual host file not found"
+        success_msg: "nginx virtual host file exists"
     - name: Check virtualhost enabled
       ansible.builtin.stat:
         path: /etc/nginx/sites-enabled/default
@@ -66,6 +76,8 @@
           - result.stat.exists
           - result.stat.islnk
           - result.stat.lnk_source == '/etc/nginx/sites-available/default'
+        fail_msg: "nginx virtual host symlink is not properly configured"
+        success_msg: "nginx virtual host symlink is properly configured"
     - name: Test load OWASP ModSecurity Core Rule Set
       when: ansible_facts.packages['libnginx-mod-http-modsecurity'] is defined
       block:
@@ -80,15 +92,19 @@
           ansible.builtin.assert:
             that:
               - modsecurity_rule_file_included is not changed
+            fail_msg: "OWASP ModSecurity Core Rule Set is not properly loaded"
+            success_msg: "OWASP ModSecurity Core Rule Set is properly loaded"
     ## サービスのテスト
     - name: Populate service facts
       ansible.builtin.service_facts:
     - name: Assert service
       ansible.builtin.assert:
         that:
-          - ansible_facts.services['nginx.service']
+          - ansible_facts.services['nginx.service'] is defined
           - ansible_facts.services['nginx.service']['state'] == 'running'
           - ansible_facts.services['nginx.service']['status'] == 'enabled'
+        fail_msg: "nginx service is not running or not enabled"
+        success_msg: "nginx service is running and enabled"
     ## 待受ポートのテスト
     - name: Gather facts on listening ports
       community.general.listen_ports_facts:
@@ -101,3 +117,5 @@
       ansible.builtin.assert:
         that:
           - 80 in listen_tcp_posts
+        fail_msg: "nginx is not listening on port 80"
+        success_msg: "nginx is listening on port 80"
