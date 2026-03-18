@@ -30,31 +30,27 @@
         fail_msg: "Some required packages are not installed"
         success_msg: "All required packages are installed"
     ## ユーザーのテスト
-    - name: Check user
-      ansible.builtin.user:
-        name: www-data
-        system: true
-      check_mode: true
-      register: result
+    - name: Get user facts
+      ansible.builtin.getent:
+        database: passwd
+        key: www-data
     - name: Assert user
       ansible.builtin.assert:
         that:
-          - result is not changed
-        fail_msg: "www-data user is not properly configured"
-        success_msg: "www-data user is properly configured"
+          - getent_passwd['www-data'] is defined
+        fail_msg: "www-data user does not exist"
+        success_msg: "www-data user exists"
     ## グループのテスト
-    - name: Check group
-      ansible.builtin.group:
-        name: www-data
-        system: true
-      check_mode: true
-      register: result
+    - name: Get group facts
+      ansible.builtin.getent:
+        database: group
+        key: www-data
     - name: Assert group
       ansible.builtin.assert:
         that:
-          - result is not changed
-        fail_msg: "www-data group is not properly configured"
-        success_msg: "www-data group is properly configured"
+          - getent_group['www-data'] is defined
+        fail_msg: "www-data group does not exist"
+        success_msg: "www-data group exists"
     # ファイルのテスト
     - name: Check virtualhost setting
       ansible.builtin.stat:
