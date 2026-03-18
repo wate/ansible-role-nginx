@@ -22,7 +22,7 @@ nginx_default_client_max_body_size: 20M
 ## --------------
 ## バーチャルホストの設定
 ## --------------
-nginx_vhosts:
+nginx_vhosts: {}
   ## --------------
   ## Simple static site
   ## --------------
