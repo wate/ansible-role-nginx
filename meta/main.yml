@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   role_name: nginx
+  namespace: wate
   author: yoshiaki tanaka
   description: setup Nginx web server
   license: Apache
